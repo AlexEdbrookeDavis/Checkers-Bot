@@ -1,2 +1,2 @@
-# Number-Recognition
-Utilizes Python machine learning library's to recognize handwritten digits
+# Checkers-Bot
+Utilizes Python machine learning library's to play checkers
