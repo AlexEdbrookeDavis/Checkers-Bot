@@ -1,5 +1,6 @@
 import unittest
 from checkers.source import board
+from checkers.source import piece
 import numpy as np
 
 class MyFirstTests(unittest.TestCase):
@@ -32,9 +33,9 @@ class MyFirstTests(unittest.TestCase):
 		self.assertRaises(Exception, game.move_piece, 0, 0, 1, 1)
 
 	def test_move_collide(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 1
-		game_state[1][2] = 1
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(1, 0)
+		game_state[1][2] = piece.CheckersPiece(1, 0)
 		game = board.CheckersGame(game_state, 1)
 		self.assertRaises(Exception, game.move_piece, 0, 1, 1, 2)
 
@@ -46,9 +47,10 @@ class MyFirstTests(unittest.TestCase):
 		self.assertEqual(game.player_turn(), 2)
 		
 	def test_legal_jump_move(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 1
-		game_state[1][2] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(1, 0)
+		game_state[1][2] = piece.CheckersPiece(2, 0)
+		game_state[2][3] = piece.CheckersPiece(0, 0)
 		game = board.CheckersGame(game_state, 1)
 		game.move_piece(0, 1, 2, 3)
 		self.assertEqual(game.val_at_loc(0, 1), 0)
@@ -57,37 +59,38 @@ class MyFirstTests(unittest.TestCase):
 		self.assertEqual(game.player_turn(), 2)
 
 	def test_jump_collide(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 1
-		game_state[1][2] = 2
-		game_state[2][3] = 1
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(1, 0)
+		game_state[1][2] = piece.CheckersPiece(2, 0)
+		game_state[2][3] = piece.CheckersPiece(1, 0)
 		game = board.CheckersGame(game_state, 1)
 		self.assertRaises(Exception, game.move_piece, 0, 1, 2, 3)
 
 	def test_jump_over_invalid(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 1
-		game_state[1][2] = 1
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(1, 0)
+		game_state[1][2] = piece.CheckersPiece(1, 0)
+		game_state[2][3] = piece.CheckersPiece(0, 0)
 		game = board.CheckersGame(game_state, 1)
 		self.assertRaises(Exception, game.move_piece, 0, 1, 2, 3)
 
 	def test_move_location_invalid(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 1
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(1, 0)
 		game = board.CheckersGame(game_state, 1)
 		self.assertRaises(Exception, game.move_piece, 0, 1, 1, 1)	
 	
 	def test_move_collide_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 2
-		game_state[1][2] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(2, 0)
+		game_state[1][2] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		self.assertRaises(Exception, game.move_piece, 1, 2, 0, 1)
 
 	def test_legal_board_move_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 0
-		game_state[1][2] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(0, 0)
+		game_state[1][2] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		game.move_piece(1, 2, 0, 1)
 		self.assertEqual(game.val_at_loc(1, 2), 0)
@@ -95,9 +98,10 @@ class MyFirstTests(unittest.TestCase):
 		self.assertEqual(game.player_turn(), 1)
 		
 	def test_legal_jump_move_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[1][2] = 1
-		game_state[2][3] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(0, 0)
+		game_state[1][2] = piece.CheckersPiece(1, 0)
+		game_state[2][3] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		game.move_piece(2, 3, 0, 1)
 		self.assertEqual(game.val_at_loc(0, 1), 2)
@@ -106,23 +110,24 @@ class MyFirstTests(unittest.TestCase):
 		self.assertEqual(game.player_turn(), 1)
 
 	def test_jump_collide_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 2
-		game_state[1][2] = 1
-		game_state[2][3] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(2, 0)
+		game_state[1][2] = piece.CheckersPiece(1, 0)
+		game_state[2][3] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		self.assertRaises(Exception, game.move_piece, 2, 3, 0, 1)
 
 	def test_jump_over_invalid_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[1][2] = 2
-		game_state[2][3] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(0, 0)
+		game_state[1][2] = piece.CheckersPiece(2, 0)
+		game_state[2][3] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		self.assertRaises(Exception, game.move_piece, 2, 3, 0, 1)
 
 	def test_move_location_invalid_reverse(self):
-		game_state = np.zeros((8, 8))
-		game_state[0][1] = 2
+		game_state = np.empty((8, 8), dtype=object)
+		game_state[0][1] = piece.CheckersPiece(2, 0)
 		game = board.CheckersGame(game_state, 2)
 		self.assertRaises(Exception, game.move_piece, 0, 1, 1, 1)		
 if __name__ == '__main__':
