@@ -1,2 +1,2 @@
 # Checkers-Bot
-Utilizes Python machine learning libraries to play checkers
+Utilizes Python machine learning libraries to play checkers.
